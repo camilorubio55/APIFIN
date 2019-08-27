@@ -1,0 +1,13 @@
+{
+    "name": "mdcloudps2019/email",
+    "description": "Correo de recuperacion de contrasena",
+    "authors": [
+        {
+            "name": "Camilo R",
+            "email": "camilorubiocontreras@gmail.com"
+        }
+    ],
+    "require": {
+        "phpmailer/phpmailer": "^6.0"
+    }
+}
