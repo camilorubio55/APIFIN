@@ -68,7 +68,7 @@ $consulta = "INSERT INTO proyecto (titulo, descripcion, fecestimada, fecentrega,
 
 if($resultado = mysqli_query($conexion,$consulta)){
     $projects[0]['success'] = 0;
-    $projects[0]['mensaje'] = 'Se inserto correctamente';
+    $projects[0]['mensaje'] = 'Se inserto proyecto correctamente';
     echo json_encode($projects);
 }
 else{

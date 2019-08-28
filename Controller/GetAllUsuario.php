@@ -28,7 +28,7 @@ if(mysqli_num_rows($resultado) > 0){
     echo json_encode($projects);
 }else{
     $projects[0]['success'] = 0;
-    $projects[0]['mensaje'] = 'No se encontro informacion';
+    $projects[0]['mensaje'] = 'No se encontraron usuarios';
     echo json_encode($projects);
 }
 mysqli_close($conexion);

@@ -26,7 +26,7 @@ $resultado = mysqli_query($conexion,$consulta);
 $row=mysqli_fetch_row($resultado);
 if($row[0] == 0){
     $projects[0]['success'] = 0;
-    $projects[0]['mensaje'] = 'El detalle del proyecto no existe';
+    $projects[0]['mensaje'] = 'La tarea no existe';
     echo json_encode($projects);
     return false;
 }
@@ -35,12 +35,12 @@ $consulta = "DELETE FROM deproyecto WHERE deproyectoid = $deproyectoid";
 
 if($resultado = mysqli_query($conexion,$consulta)){
     $projects[0]['success'] = 1;
-    $projects[0]['mensaje'] = 'El detalle del proyecto se elimino correctamente';
+    $projects[0]['mensaje'] = 'La tarea se elimino correctamente';
     echo json_encode($projects);
 }
 else{
     $projects[0]['success'] = 0;
-    $projects[0]['mensaje'] = 'No se elimino detalle del proyecto';
+    $projects[0]['mensaje'] = 'No se elimino la tarea';
     echo json_encode($projects);
 }
 
