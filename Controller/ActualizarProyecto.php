@@ -9,12 +9,19 @@ $data = json_decode(file_get_contents("php://input"));
 
 if(!empty($data->proyectoid) && !empty($data->titulo) && !empty($data->fecestimada) && !empty($data->fecentrega) && ($data->horas)){
     $proyectoid = mysqli_real_escape_string($conexion, trim($data->proyectoid));;
-    $titulo = mysqli_real_escape_string($conexion, trim($data->titulo));;
+    if(strlen(trim($data->titulo)) <= 50){
+        $titulo = mysqli_real_escape_string($conexion, trim($data->titulo));;
+    }
+    else{
+        $projects[0]['success'] = 0;
+        $projects[0]['mensaje'] = 'El titulo tiene mas de 50 caracteres, no se puede actualizar.';
+        echo json_encode($projects);
+        return false;
+    } 
     $descripcion = mysqli_real_escape_string($conexion, trim($data->descripcion));;
     $fecestimada = mysqli_real_escape_string($conexion, trim($data->fecestimada));;
     $fecentrega = mysqli_real_escape_string($conexion, trim($data->fecentrega));;
     $horas = mysqli_real_escape_string($conexion, trim($data->horas));;
-
     $fecestimada = date('Y-m-d', strtotime(strtr($fecestimada, '/', '-')));
     $fecentrega = date('Y-m-d', strtotime(strtr($fecentrega, '/', '-')));
 }

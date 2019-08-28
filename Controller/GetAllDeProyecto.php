@@ -26,7 +26,7 @@ if(mysqli_num_rows($resultado) > 0){
     while($row = mysqli_fetch_assoc($resultado)){
         $projects[$i]['deproyectoid'] = $row['deproyectoid'];
         $projects[$i]['titulo'] = $row['titulo'];
-        $projects[$i]['fecha'] = date("d/m/y", strtotime($row['fecha']));
+        $projects[$i]['fecha'] = date("d/m/Y", strtotime($row['fecha']));
         $i++;
     }
     echo json_encode($projects);

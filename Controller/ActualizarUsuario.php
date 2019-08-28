@@ -7,11 +7,39 @@ mysqli_set_charset($conexion,"utf8");
 
 $data = json_decode(file_get_contents("php://input"));
 
-if(!empty($data->usuidsesion) && !empty($data->usuid) && !empty($data->codigo) && !empty($data->nombre) && !is_null($data->rol)){
+if(!empty($data->usuidsesion) && !empty($data->usuid) && !empty($data->codigo) && !empty($data->contrasena) && !empty($data->nombre) && !is_null($data->rol)){
     $usuidsesion = mysqli_real_escape_string($conexion, trim($data->usuidsesion));;
     $usuid = mysqli_real_escape_string($conexion, trim($data->usuid));;
-    $codigo = mysqli_real_escape_string($conexion, trim($data->codigo));;
-    $nombre = mysqli_real_escape_string($conexion, trim($data->nombre));;
+    if(strlen(trim($data->codigo)) <= 50){
+        $codigo = mysqli_real_escape_string($conexion, trim($data->codigo));;
+    }
+    else{
+        $projects[0]['success'] = 0;
+        $projects[0]['mensaje'] = 'El correo no debe tener mas de 50 caracteres, no se puede actualizar.';
+        echo json_encode($projects);
+        return false;
+    }
+    
+    if(strlen(trim($data->contrasena)) <= 250){
+        $contrasena = mysqli_real_escape_string($conexion, trim($data->contrasena));;
+    }
+    else{
+        $projects[0]['success'] = 0;
+        $projects[0]['mensaje'] = 'La contrasena no debe tener mas de 250 caracteres, no se puede actualizar.';
+        echo json_encode($projects);
+        return false;
+    }
+
+    if(strlen(trim($data->nombre)) <= 250){
+        $nombre = mysqli_real_escape_string($conexion, trim($data->nombre));;
+    }
+    else{
+        $projects[0]['success'] = 0;
+        $projects[0]['mensaje'] = 'El nombre no debe tener mas de 250 caracteres, no se puede actualizar.';
+        echo json_encode($projects);
+        return false;
+    }
+    
     $rol = mysqli_real_escape_string($conexion, trim($data->rol));;
 }
 else if(empty($data->usuidsesion)){
@@ -29,6 +57,12 @@ else if(empty($data->usuid)){
 else if(empty($data->codigo)){
     $projects[0]['success'] = 0;
     $projects[0]['mensaje'] = 'El campo codigo esta vacio';
+    echo json_encode($projects);
+    return false;
+}
+else if(empty($data->contrasena)){
+    $projects[0]['success'] = 0;
+    $projects[0]['mensaje'] = 'El campo contrasena esta vacio';
     echo json_encode($projects);
     return false;
 }
@@ -80,6 +114,7 @@ if($row[0] == 0){
 
 $consulta = "UPDATE usuario 
                          SET codigo = '{$codigo}', 
+                             contrasena = '{$contrasena}', 
                              nombre = '{$nombre}', 
                              rol = '{$rol}' 
              WHERE usuid = $usuid ";

@@ -27,8 +27,8 @@ if(mysqli_num_rows($resultado) > 0){
         $projects[$i]['proyectoid'] = $row ['proyectoid'];
         $projects[$i]['titulo'] = $row ['titulo'];
         $projects[$i]['descripcion'] = $row ['descripcion'];
-        $projects[$i]['fecestimada'] = $row ['fecestimada'];
-        $projects[$i]['fecentrega'] = $row ['fecentrega'];
+        $projects[$i]['fecestimada'] = date("d/m/Y", strtotime($row ['fecestimada']));
+        $projects[$i]['fecentrega'] = date("d/m/Y", strtotime($row ['fecentrega']));
         $projects[$i]['horas'] = $row ['horas'];
         $i++;
     }

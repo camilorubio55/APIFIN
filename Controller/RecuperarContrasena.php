@@ -42,13 +42,14 @@ $usuid = $row[1];
 $mail = new PHPMailer(true);
 try{
     $nuevacontra = substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, 10);
-    #$mail->SMTPDebug = 2;
+    $mail->SMTPDebug = 2;
     $mail->isSMTP();
     $mail->Host = 'smtp.gmail.com';
     $mail->SMTPAuth = true;
     $mail->Username = 'camilorubiocontreras@gmail.com';
     $mail->Password = 'fhdwcxfppxveavfh';
     $mail->SMTPSecure = 'tls';
+    #$mail->Port = 587;
     $mail->Port = 587;
     $mail->setFrom('camilorubiocontreras@gmail.com');
     $mail->addAddress($codigo);

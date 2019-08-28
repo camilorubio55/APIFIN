@@ -9,14 +9,30 @@ $data = json_decode(file_get_contents("php://input"));
 
 if(!empty($data->proyectoid) && !empty($data->titulo) && !empty($data->fecha) && !empty($data->usuid)){
     $proyectoid = mysqli_real_escape_string($conexion, trim($data->proyectoid));;
-    $titulo = mysqli_real_escape_string($conexion, trim($data->titulo));;
+    if(strlen(trim($data->titulo)) <= 50){
+        $titulo = mysqli_real_escape_string($conexion, trim($data->titulo));;
+    }
+    else{
+        $projects[0]['success'] = 0;
+        $projects[0]['mensaje'] = 'El titulo no debe tener mas de 50 caracteres, no se puede insertar.';
+        echo json_encode($projects);
+        return false;
+    }
     $descripcion = mysqli_real_escape_string($conexion, trim($data->descripcion));;
     $fecha = mysqli_real_escape_string($conexion, trim($data->fecha));;
     $fecha = date('Y-m-d', strtotime(strtr($fecha, '/', '-')));
     $usuid = mysqli_real_escape_string($conexion, trim($data->usuid));;
 }
 else if(!empty($data->titulo) && !empty($data->fecha) && !empty($data->usuid)){
-    $titulo = mysqli_real_escape_string($conexion, trim($data->titulo));;
+    if(strlen(trim($data->titulo)) <= 50){
+        $titulo = mysqli_real_escape_string($conexion, trim($data->titulo));;
+    }
+    else{
+        $projects[0]['success'] = 0;
+        $projects[0]['mensaje'] = 'El titulo tiene mas de 50 caracteres, no se puede insertar.';
+        echo json_encode($projects);
+        return false;
+    }
     $descripcion = mysqli_real_escape_string($conexion, trim($data->descripcion));;
     $fecha = mysqli_real_escape_string($conexion, trim($data->fecha));;
     $fecha = date('Y-m-d', strtotime(strtr($fecha, '/', '-')));
@@ -75,7 +91,7 @@ if(!empty($data->proyectoid) && !empty($data->usuid)){
 }
 else{
     $consulta = "INSERT INTO deproyecto (titulo, descripcion, fecha, usuid) 
-                                 VALUES ('{$titulo}', '{$descripcion}', '{$fecha}', $usuid)";
+                             VALUES ('{$titulo}', '{$descripcion}', '{$fecha}', $usuid)";
 }
 
 if($resultado = mysqli_query($conexion,$consulta)){
@@ -85,7 +101,7 @@ if($resultado = mysqli_query($conexion,$consulta)){
 }
 else{
     $projects[0]['success'] = 0;
-    $projects[0]['mensaje'] = 'No se inserto tarea del proyecto';
+    $projects[0]['mensaje'] = 'No se inserto tarea';
     echo json_encode($projects);
 }
 

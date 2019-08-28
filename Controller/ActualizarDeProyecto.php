@@ -10,14 +10,30 @@ $data = json_decode(file_get_contents("php://input"));
 if(!empty($data->deproyectoid) && !empty($data->proyectoid) && !empty($data->titulo) && !empty($data->fecha)){
     $deproyectoid = mysqli_real_escape_string($conexion, trim($data->deproyectoid));;
     $proyectoid = mysqli_real_escape_string($conexion, trim($data->proyectoid));;
-    $titulo = mysqli_real_escape_string($conexion, trim($data->titulo));;
+    if(strlen(trim($data->titulo)) <= 50){
+        $titulo = mysqli_real_escape_string($conexion, trim($data->titulo));;
+    }
+    else{
+        $projects[0]['success'] = 0;
+        $projects[0]['mensaje'] = 'El titulo no debe tener mas de 50 caracteres, no se puede insertar.';
+        echo json_encode($projects);
+        return false;
+    }
     $descripcion = mysqli_real_escape_string($conexion, trim($data->descripcion));;
     $fecha = mysqli_real_escape_string($conexion, trim($data->fecha));;
     $fecha = date('Y-m-d', strtotime(strtr($fecha, '/', '-')));
 }
 else if(!empty($data->deproyectoid) && !empty($data->titulo) && !empty($data->fecha)){
     $deproyectoid = mysqli_real_escape_string($conexion, trim($data->deproyectoid));;
-    $titulo = mysqli_real_escape_string($conexion, trim($data->titulo));;
+    if(strlen(trim($data->titulo)) <= 50){
+        $titulo = mysqli_real_escape_string($conexion, trim($data->titulo));;
+    }
+    else{
+        $projects[0]['success'] = 0;
+        $projects[0]['mensaje'] = 'El titulo no debe tener mas de 50 caracteres, no se puede insertar.';
+        echo json_encode($projects);
+        return false;
+    }
     $descripcion = mysqli_real_escape_string($conexion, trim($data->descripcion));;
     $fecha = mysqli_real_escape_string($conexion, trim($data->fecha));;
     $fecha = date('Y-m-d', strtotime(strtr($fecha, '/', '-')));
@@ -68,8 +84,8 @@ if(!empty($data->proyectoid)){
     }
 
     $consulta = "SELECT COUNT(proyectoid) 
-                 FROM proyecto 
-                 WHERE proyectoid = $proyectoid AND usuid = $usuid ";
+                    FROM proyecto 
+                    WHERE proyectoid = $proyectoid AND usuid = $usuid ";
     $resultado = mysqli_query($conexion,$consulta);
 
     $row=mysqli_fetch_row($resultado);

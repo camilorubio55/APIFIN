@@ -46,6 +46,7 @@ if(mysqli_num_rows($resultado) > 0){
     $i = 0;
     while($row = mysqli_fetch_assoc($resultado)){
         $projects[$i]['codigo'] = $row ['codigo'];
+        $projects[$i]['contrasena'] = $row ['contrasena'];
         $projects[$i]['nombre'] = $row ['nombre'];
         $projects[$i]['rol'] = $row ['rol'];
         $i++;

@@ -11,25 +11,39 @@ if(!empty($data->usuid)){
     $usuid = mysqli_real_escape_string($conexion, trim($data->usuid));;
 }
 
-$consulta = "SELECT *   
+$consulta = "SELECT rol  
                 FROM usuario 
-                WHERE usuid <> $usuid ";
+                WHERE usuid = $usuid ";
 $resultado = mysqli_query($conexion,$consulta);
 
-if(mysqli_num_rows($resultado) > 0){
-    $i = 0;
-    while($row = mysqli_fetch_assoc($resultado)){
-        $projects[$i]['usuid'] = $row['usuid'];
-        $projects[$i]['codigo'] = $row['codigo'];
-        $projects[$i]['nombre'] = $row['nombre'];
-        $projects[$i]['rol'] = $row['rol'];
-        $i++;
+$row=mysqli_fetch_row($resultado);
+if($row[0] == 1){
+    $consulta = "SELECT *   
+    FROM usuario 
+    WHERE usuid <> $usuid ";
+    $resultado = mysqli_query($conexion,$consulta);
+
+    if(mysqli_num_rows($resultado) > 0){
+        $i = 0;
+        while($row = mysqli_fetch_assoc($resultado)){
+            $projects[$i]['usuid'] = $row['usuid'];
+            $projects[$i]['codigo'] = $row['codigo'];
+            $projects[$i]['nombre'] = $row['nombre'];
+            $projects[$i]['rol'] = $row['rol'];
+            $i++;
+        }
+        echo json_encode($projects);
+    }else{
+        $projects[0]['success'] = 0;
+        $projects[0]['mensaje'] = 'No se encontraron usuarios';
+        echo json_encode($projects);
     }
-    echo json_encode($projects);
 }else{
     $projects[0]['success'] = 0;
-    $projects[0]['mensaje'] = 'No se encontraron usuarios';
+    $projects[0]['mensaje'] = 'Solo los usuarios con rol de administrador pueden visualizar informacion'; 
     echo json_encode($projects);
 }
+
 mysqli_close($conexion);
+
 ?>
