@@ -1,6 +1,7 @@
 <?php
 
 require("BD.php");
+require("Helpers.php");
 
 $conexion = mysqli_connect($host,$username,$password,$db_name);
 mysqli_set_charset($conexion,"utf8");
@@ -19,8 +20,9 @@ if(!empty($data->proyectoid) && !empty($data->titulo) && !empty($data->fecha) &&
         return false;
     }
     $descripcion = mysqli_real_escape_string($conexion, trim($data->descripcion));;
-    $fecha = mysqli_real_escape_string($conexion, trim($data->fecha));;
-    $fecha = date('Y-m-d', strtotime(strtr($fecha, '/', '-')));
+    if(!$fecha = validafecha($conexion,trim($data->fecha))){
+        return false;
+    }; 
     $usuid = mysqli_real_escape_string($conexion, trim($data->usuid));;
 }
 else if(!empty($data->titulo) && !empty($data->fecha) && !empty($data->usuid)){
@@ -34,8 +36,9 @@ else if(!empty($data->titulo) && !empty($data->fecha) && !empty($data->usuid)){
         return false;
     }
     $descripcion = mysqli_real_escape_string($conexion, trim($data->descripcion));;
-    $fecha = mysqli_real_escape_string($conexion, trim($data->fecha));;
-    $fecha = date('Y-m-d', strtotime(strtr($fecha, '/', '-')));
+    if(!$fecha = validafecha($conexion,trim($data->fecha))){
+        return false;
+    }; 
     $usuid = mysqli_real_escape_string($conexion, trim($data->usuid));;
 }
 else if(empty($data->titulo)){

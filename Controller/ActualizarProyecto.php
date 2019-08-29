@@ -1,13 +1,14 @@
 <?php
 
 require("BD.php");
+require("Helpers.php");
 
 $conexion = mysqli_connect($host,$username,$password,$db_name);
 mysqli_set_charset($conexion,"utf8");
 
 $data = json_decode(file_get_contents("php://input"));
 
-if(!empty($data->proyectoid) && !empty($data->titulo) && !empty($data->fecestimada) && !empty($data->fecentrega) && ($data->horas)){
+if(!empty($data->proyectoid) && !empty($data->titulo) && !empty($data->fecestimada) && ($data->horas)){
     $proyectoid = mysqli_real_escape_string($conexion, trim($data->proyectoid));;
     if(strlen(trim($data->titulo)) <= 50){
         $titulo = mysqli_real_escape_string($conexion, trim($data->titulo));;
@@ -19,11 +20,10 @@ if(!empty($data->proyectoid) && !empty($data->titulo) && !empty($data->fecestima
         return false;
     } 
     $descripcion = mysqli_real_escape_string($conexion, trim($data->descripcion));;
-    $fecestimada = mysqli_real_escape_string($conexion, trim($data->fecestimada));;
-    $fecentrega = mysqli_real_escape_string($conexion, trim($data->fecentrega));;
     $horas = mysqli_real_escape_string($conexion, trim($data->horas));;
-    $fecestimada = date('Y-m-d', strtotime(strtr($fecestimada, '/', '-')));
-    $fecentrega = date('Y-m-d', strtotime(strtr($fecentrega, '/', '-')));
+    if(!$fecestimada = validafecha($conexion,trim($data->fecestimada))){
+        return false;
+    }; 
 }
 else if(empty($data->proyectoid)){
     $projects[0]['success'] = 0;
@@ -40,12 +40,6 @@ else if(empty($data->titulo)){
 else if(empty($data->fecestimada)){
     $projects[0]['success'] = 0;
     $projects[0]['mensaje'] = 'El campo fecha estimada esta vacio';
-    echo json_encode($projects);
-    return false;
-}
-else if(empty($data->fecentrega)){
-    $projects[0]['success'] = 0;
-    $projects[0]['mensaje'] = 'El campo fecha de entrega esta vacio';
     echo json_encode($projects);
     return false;
 }
@@ -74,7 +68,6 @@ $consulta = "UPDATE proyecto
                          SET titulo = '{$titulo}', 
                              descripcion = '{$descripcion}', 
                              fecestimada = '{$fecestimada}', 
-                             fecentrega = '{$fecentrega}', 
                              horas = '{$horas}' 
              WHERE proyectoid = $proyectoid ";
 

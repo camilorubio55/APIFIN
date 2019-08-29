@@ -1,6 +1,7 @@
 <?php
 
 require("BD.php");
+require("Helpers.php");
 
 $conexion = mysqli_connect($host,$username,$password,$db_name);
 mysqli_set_charset($conexion,"utf8");
@@ -20,8 +21,9 @@ if(!empty($data->deproyectoid) && !empty($data->proyectoid) && !empty($data->tit
         return false;
     }
     $descripcion = mysqli_real_escape_string($conexion, trim($data->descripcion));;
-    $fecha = mysqli_real_escape_string($conexion, trim($data->fecha));;
-    $fecha = date('Y-m-d', strtotime(strtr($fecha, '/', '-')));
+    if(!$fecha = validafecha($conexion,trim($data->fecha))){
+        return false;
+    }; 
 }
 else if(!empty($data->deproyectoid) && !empty($data->titulo) && !empty($data->fecha)){
     $deproyectoid = mysqli_real_escape_string($conexion, trim($data->deproyectoid));;
@@ -35,8 +37,9 @@ else if(!empty($data->deproyectoid) && !empty($data->titulo) && !empty($data->fe
         return false;
     }
     $descripcion = mysqli_real_escape_string($conexion, trim($data->descripcion));;
-    $fecha = mysqli_real_escape_string($conexion, trim($data->fecha));;
-    $fecha = date('Y-m-d', strtotime(strtr($fecha, '/', '-')));
+    if(!$fecha = validafecha($conexion,trim($data->fecha))){
+        return false;
+    }; 
 }
 else if(empty($data->deproyectoid)){
     $projects[0]['success'] = 0;
